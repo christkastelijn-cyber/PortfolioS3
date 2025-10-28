@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap');
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 35vh;
+  background-image: url('/footerachtergrond.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; 
+  color: black;
+  text-align: center;
+  padding: 1.5rem 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.inter {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000000;
+  line-height: 1.6;
+  text-align: left;
+}
+
+

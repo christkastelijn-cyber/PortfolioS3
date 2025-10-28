@@ -165,6 +165,8 @@ export default function HomePage() {
       )}
       <img className='kleinepalmboom' src="kleine palmboom.png" alt="" />
       <img className='grotepalmboom' src="grotepalmboom.png" alt="" />
+      <SectionFooter />
+
     </div>
   );
 }
