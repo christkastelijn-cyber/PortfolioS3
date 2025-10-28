@@ -3,11 +3,15 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import '@/styling/dashboard.css';
 
 interface Project {
   id: string;
   title: string;
   description: string;
+  project_url?: string;
+  image_url?: string;
+  preview_url?: string | null;
   created_at?: string;
 }
 
@@ -16,13 +20,14 @@ export default function DashboardPage() {
   const [projecten, setProjecten] = useState<Project[]>([]);
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState('');
+  const [newProjectUrl, setNewProjectUrl] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editDescription, setEditDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // ✅ Check of gebruiker is ingelogd
   useEffect(() => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -32,7 +37,6 @@ export default function DashboardPage() {
     checkSession();
   }, [router]);
 
-  // ✅ Ophalen projecten
   const fetchProjecten = async () => {
     const { data, error } = await supabase
       .from('projecten')
@@ -47,28 +51,91 @@ export default function DashboardPage() {
     fetchProjecten();
   }, []);
 
-  // ✅ Nieuw project toevoegen
+  const getPreviewUrl = async (url: string) => {
+    if (!url) return null;
+    try {
+      const response = await fetch(`https://api.microlink.io?url=${encodeURIComponent(url)}&screenshot=true`);
+      const data = await response.json();
+      return data.data?.screenshot?.url || null;
+    } catch (err) {
+      console.error('Error fetching preview:', err);
+      return null;
+    }
+  };
+
   const handleAddProject = async () => {
     if (!newTitle.trim() || !newDescription.trim()) return;
     setLoading(true);
 
-    const { data, error } = await supabase
-      .from('projecten')
-      .insert([{ title: newTitle, description: newDescription }])
-      .select();
+    let uploadedImageUrl: string | null = null;
+    let projectUrlToSave: string | null = null;
 
-    setLoading(false);
+    if (imageFile) {
+      const fileName = `${Date.now()}-${imageFile.name}`;
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('project-images')
+        .upload(fileName, imageFile);
 
-    if (error) {
-      console.error(error);
-    } else {
-      setProjecten([...data, ...projecten]);
-      setNewTitle('');
-      setNewDescription('');
+      if (uploadError) console.error('Upload error:', uploadError.message);
+      else if (uploadData) {
+        const { data: publicUrlData } = supabase.storage
+          .from('project-images')
+          .getPublicUrl(fileName);
+        uploadedImageUrl = publicUrlData?.publicUrl || null;
+      }
+    }
+
+    if (newProjectUrl.trim()) {
+      projectUrlToSave = newProjectUrl.trim();
+      if (!projectUrlToSave.startsWith('http')) {
+        projectUrlToSave = 'https://' + projectUrlToSave;
+      }
+    }
+
+    try {
+      const { data: insertData, error: insertError } = await supabase
+        .from('projecten')
+        .insert([{
+          title: newTitle,
+          description: newDescription,
+          project_url: projectUrlToSave,
+          image_url: uploadedImageUrl,
+          preview_url: null,
+        }])
+        .select();
+
+      if (insertError) throw insertError;
+      if (insertData) {
+        const newProject = insertData[0];
+        setProjecten([newProject, ...projecten]);
+        setNewTitle('');
+        setNewDescription('');
+        setNewProjectUrl('');
+        setImageFile(null);
+
+        if (projectUrlToSave) {
+          getPreviewUrl(projectUrlToSave).then(previewUrl => {
+            if (previewUrl) {
+              supabase
+                .from('projecten')
+                .update({ preview_url: previewUrl })
+                .eq('id', newProject.id)
+                .then(() => {
+                  setProjecten(prev =>
+                    prev.map(p => (p.id === newProject.id ? { ...p, preview_url: previewUrl } : p))
+                  );
+                });
+            }
+          });
+        }
+      }
+    } catch (err: any) {
+      console.error('Error adding project:', err.message || err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ✅ Project bijwerken
   const handleUpdateProject = async (id: string) => {
     const { data, error } = await supabase
       .from('projecten')
@@ -83,117 +150,123 @@ export default function DashboardPage() {
     }
   };
 
-  // ✅ Project verwijderen
   const handleDeleteProject = async (id: string) => {
     const { error } = await supabase.from('projecten').delete().eq('id', id);
     if (error) console.error(error);
     else setProjecten(projecten.filter(p => p.id !== id));
   };
 
-  // ✅ Uitloggen
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push('/login');
+    router.push('/');
   };
 
-  if (!user) return <p className="text-black">Loading...</p>;
+  if (!user) return <p className="loading-text">Loading...</p>;
 
   return (
-    <div className="min-h-screen p-8 bg-gradient-to-br from-gray-100 to-gray-200 text-gray-900">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition"
-        >
-          Logout
-        </button>
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h1 className="dashboard-title">Dashboard</h1>
+        <button onClick={handleLogout} className="logout-button">Logout</button>
       </div>
 
-      <p className="mb-6 text-gray-700">Welkom, {user.email}</p>
+      <p className="welcome-text">Welkom, {user.email}</p>
 
-      {/* Nieuw project toevoegen */}
-      <div className="bg-white p-5 rounded-lg shadow mb-6 border border-gray-200">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">Nieuw project toevoegen</h2>
+      <div className="project-form">
+        <h2 className="form-title">Nieuw project toevoegen</h2>
         <input
           type="text"
           placeholder="Titel"
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
-          className="border border-gray-400 p-2 rounded w-full mb-3 bg-white text-black placeholder-gray-500"
+          className="form-input"
         />
         <textarea
           placeholder="Beschrijving"
           value={newDescription}
           onChange={(e) => setNewDescription(e.target.value)}
-          className="border border-gray-400 p-2 rounded w-full mb-3 bg-white text-black placeholder-gray-500"
+          className="form-input"
         />
+        <input
+          type="text"
+          placeholder="Website URL (optioneel)"
+          value={newProjectUrl}
+          onChange={(e) => setNewProjectUrl(e.target.value)}
+          className="form-input"
+        />
+        <div className="file-upload">
+          <label className="file-label">Of upload een afbeelding:</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+            className="form-input"
+          />
+        </div>
         <button
           onClick={handleAddProject}
           disabled={loading}
-          className={`bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition ${
-            loading ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
+          className={`add-button ${loading ? 'loading' : ''}`}
         >
           {loading ? 'Toevoegen...' : 'Toevoegen'}
         </button>
       </div>
 
-      {/* Lijst van projecten */}
-      <h2 className="text-2xl font-semibold mb-3 text-gray-800">Mijn projecten</h2>
+      <h2 className="projects-title">Mijn projecten</h2>
 
       {projecten.length === 0 ? (
-        <p className="text-gray-600">Nog geen projecten toegevoegd.</p>
+        <p className="no-projects">Nog geen projecten toegevoegd.</p>
       ) : (
-        <ul className="space-y-4">
+        <ul className="project-list">
           {projecten.map((item) => (
-            <li key={item.id} className="bg-white p-4 rounded-lg shadow border border-gray-200">
+            <li key={item.id} className="project-item">
               {editingId === item.id ? (
                 <div>
                   <input
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="border border-gray-400 p-2 rounded w-full mb-2 text-black"
+                    className="form-input"
                   />
                   <textarea
                     value={editDescription}
                     onChange={(e) => setEditDescription(e.target.value)}
-                    className="border border-gray-400 p-2 rounded w-full mb-2 text-black"
+                    className="form-input"
                   />
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleUpdateProject(item.id)}
-                      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-                    >
-                      Opslaan
-                    </button>
-                    <button
-                      onClick={() => setEditingId(null)}
-                      className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
-                    >
-                      Annuleren
-                    </button>
+                  <div className="button-group">
+                    <button onClick={() => handleUpdateProject(item.id)} className="save-button">Opslaan</button>
+                    <button onClick={() => setEditingId(null)} className="cancel-button">Annuleren</button>
                   </div>
                 </div>
               ) : (
                 <>
-                  <h3 className="text-xl font-semibold text-gray-900">{item.title}</h3>
-                  <p className="text-gray-700 mb-3">{item.description}</p>
-                  <div className="flex gap-2">
+                  <h3 className="project-title">{item.title}</h3>
+                  <p className="project-description">{item.description}</p>
+
+                  {item.project_url ? (
+                    <img
+                      src={`https://api.microlink.io/?url=${encodeURIComponent(item.project_url)}&screenshot=true&meta=false&embed=screenshot.url`}
+                      alt="Project preview"
+                      className="project-image"
+                    />
+                  ) : item.image_url ? (
+                    <img src={item.image_url} alt="Project afbeelding" className="project-image" />
+                  ) : null}
+
+                  <div className="button-group">
                     <button
                       onClick={() => {
                         setEditingId(item.id);
                         setEditTitle(item.title);
                         setEditDescription(item.description);
                       }}
-                      className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                      className="edit-button"
                     >
                       Bewerken
                     </button>
                     <button
                       onClick={() => handleDeleteProject(item.id)}
-                      className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                      className="delete-button"
                     >
                       Verwijderen
                     </button>

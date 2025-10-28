@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import '@/styling/login.css';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -36,16 +37,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-200">
-      <div className="bg-gray-900 p-8 rounded-lg shadow-lg w-80">
-        <h1 className="text-2xl font-bold mb-6 text-center text-white">Login</h1>
-        <form onSubmit={handleLogin} className="flex flex-col gap-4">
+    <div className="login-container">
+      <div className="login-box">
+        <h1 className="login-title">Login</h1>
+        <form onSubmit={handleLogin} className="login-form">
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="border border-gray-300 p-2 rounded bg-white text-black"
+            className="login-input"
             required
           />
           <input
@@ -53,19 +54,17 @@ export default function LoginPage() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="border border-gray-300 p-2 rounded bg-white text-black"
+            className="login-input"
             required
           />
           <button
             type="submit"
             disabled={loading}
-            className={`bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition ${
-              loading ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className={`login-button ${loading ? 'loading' : ''}`}
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
-          {error && <p className="text-red-400 text-center">{error}</p>}
+          {error && <p className="login-error">{error}</p>}
         </form>
       </div>
     </div>
