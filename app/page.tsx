@@ -82,7 +82,7 @@ export default function HomePage() {
       <div className="homepage-header">
         <button
           onClick={() => router.push('/login')}
-          className="login-button"
+          className="login-button1"
         >
           Login
         </button>
