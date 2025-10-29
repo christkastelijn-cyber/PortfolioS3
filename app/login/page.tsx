@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import '@/styling/login.css';
 
 export default function LoginPage() {
@@ -38,6 +39,11 @@ export default function LoginPage() {
 
   return (
     <div className="login-container">
+      {/* ✅ Back button */}
+      <Link href="/" className="back-button">
+        ← Back
+      </Link>
+
       <div className="login-box">
         <h1 className="login-title">Login</h1>
         <form onSubmit={handleLogin} className="login-form">

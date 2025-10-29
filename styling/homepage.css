@@ -324,7 +324,7 @@
   opacity: 0.4;
   left: 5%;
   height: 33%;
-  bottom: 30vh;
+  bottom: 22vh;
   width: auto;
   z-index: -1;
   transform: scaleX(-1);
@@ -335,7 +335,7 @@
   opacity: 0.4;
   right: -5%;
   height: 40%;
-  bottom: 30vh;
+  bottom: 22vh;
   width: auto;
   z-index: -1;
 }

@@ -38,9 +38,9 @@ export default function HomePage() {
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       if (dist < radius) {
-        const factor = (radius - dist) / radius; // 0 -> 1
-        const translateY = -70 * factor; // max 20px omhoog (voor meer beweging)
-        const glow = factor * 1.2; // opacity van gloed verhogen
+        const factor = (radius - dist) / radius; 
+        const translateY = -70 * factor;
+        const glow = factor * 1.2; 
         (el as HTMLElement).style.transform = `translateY(${translateY}px)`;
         (el as HTMLElement).style.textShadow = `
           0 0 ${25 * glow}px rgba(255, 215, 0, ${glow}),
@@ -101,7 +101,7 @@ export default function HomePage() {
         </h1>
       </div>
 
-      <div className='Over-mij-tekst'>
+      <div id='Over-mij' className='Over-mij-tekst'>
         <h1 className="Over-mij chewy">
           Over <span style={{ color: '#FFD700' }}>mij</span>  
         </h1>
@@ -125,7 +125,7 @@ export default function HomePage() {
       </p>
       </div>
 
-      <div className='projecten-tekst chewy'>Projecten</div>
+      <div id='Projecten' className='projecten-tekst chewy'>Projecten</div>
 
       {projecten.length === 0 ? (
         <p className="homepage-empty">Er zijn nog geen projecten toegevoegd.</p>
