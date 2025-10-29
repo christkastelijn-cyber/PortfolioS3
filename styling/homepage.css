@@ -21,7 +21,7 @@
 .homepage-container {
   position: relative;
   z-index: 1; 
-  min-height: 300vh;
+  min-height: auto;
   background: linear-gradient(
     to bottom,
     #00AEFF 0%,
@@ -32,16 +32,36 @@
   );
   color: #1f2937;
   overflow-x: hidden;
+  padding-bottom: 350px;
 }
 
 
 .wolkenhomepage {
   position: absolute;
-  top: 0;
+  top: -50;
   left: 0;
-  width: 100%;
+  width: 200%; /* dubbele breedte voor naadloze animatie */
+  height: 100vh;
   z-index: -1;
+  background: url('/wolk.png') repeat-x;
+  background-size: auto 100%;
+  opacity: 0.9;
+
+  /* animatie van hele div */
+  animation: wolkenBeweging 60s linear infinite;
 }
+
+@keyframes wolkenBeweging {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%); /* halve breedte verplaatsen = naadloze loop */
+  }
+}
+
+
+
 
 .homepage-header-text{
     margin-top: 6%;
@@ -49,15 +69,32 @@
 }
 
 .homepage-title {
-  display: flex;
+  display: inline-block;
   font-size: 9.0rem;
   color: black;
+  transition: transform 0.2s ease, text-shadow 0.3s ease, color 0.3s ease;
+  transform-style: preserve-3d;
+  cursor: default;
 }
 
 .Naam {
   font-size: 9.0rem;
   color: black;
   margin-top: -40px;
+  margin-left: 11%;
+  display: inline-block;
+  transition: transform 0.2s ease, text-shadow 0.3s ease, color 0.3s ease;
+  transform-style: preserve-3d;
+  cursor: default;
+}
+
+.letter {
+  display: inline-block;
+  transition: transform 0.2s ease, text-shadow 0.2s ease;
+}
+
+.letter:hover {
+  cursor: default;
 }
 
 .Over-mij-tekst {
@@ -302,3 +339,4 @@
   width: auto;
   z-index: -1;
 }
+
