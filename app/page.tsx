@@ -106,23 +106,19 @@ export default function HomePage() {
           Over <span style={{ color: '#FFD700' }}>mij</span>  
         </h1>
 
-      <p className='verhaaltje-christ inter'> 
-        Ik ben <span style={{color: '#FFD700'}}>Christ Kastleijn</span>, 
-        een nieuwsgierige en gedreven <span style={{color: '#FFD700'}}>HBO ICT</span> 
-        student die houdt van alles wat met <span style={{color: '#FFD700'}}>technologie </span>
-        te maken heeft. Van het bouwen van slimme webapps tot het analyseren van grote data, 
-        ik vind het geweldig om creatieve oplossingen te bedenken en ze tot leven te 
-        brengen.<br /><br /> 
-        Buiten school ben ik niet alleen bezig met 
-        <span style={{color: '#FFD700'}}>technologische trends</span> en tools, 
-        maar ben ik ook actief met <span style={{color: '#FFD700'}}>voetbal</span>. 
-        Of het nu op het veld trainen is, wedstrijden spelen of tactieken bespreken, 
-        sport geeft me energie en discipline.<br /><br /> 
-        Ik combineer mijn passie voor 
-        <span style={{color: '#FFD700'}}>programmeren</span> en technologie met mijn 
-        liefde voor <span style={{color: '#FFD700'}}>voetbal</span>. Zo blijf ik 
-        nieuwsgierig, creatief en gemotiveerd, zowel in projecten als in het dagelijks leven. 
-      </p>
+        <h1 className='verhaaltje-christ inter'>
+          Loren ipsum dolor sit amet, consectetur adipiscing elit. 
+          Suspendisse eu mollis ligula, non sollicitudin velit. Suspendisse aliquam scelerisque ligula 
+          fringilla venenatis. Curabitur ullamcorper lorem et justo ornare posuere. Aenean faucibus, 
+          metus eget cursus lobortis, neque augue blandit nulla, eget mollis ipsum mi sit amet felis. 
+          <br /><br />
+          Nunc sed risus ac enim congue consequat. Nullam ac vehicula tellus. Nunc posuere erat velit, 
+          eget convallis massa luctus a. Curabitur at enim nunc. Nam euismod elementum gravida.
+          Ut iaculis volutpat risus eu ornare. Fusce tristique aliquam ipsum ut lacinia. Duis ex ipsum, 
+          mollis vehicula luctus in, vehicula quis augue. Nulla ac est vel lorem aliquet lobortis eget in ligula. 
+          Nullam condimentum, augue viverra fermentum scelerisque, quam augue finibus urna, 
+          ut fringilla erat magna vel sem.
+        </h1>
       </div>
 
       <div id='Projecten' className='projecten-tekst chewy'>Projecten</div>
