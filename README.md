@@ -10,6 +10,8 @@ Dit is gemaakt voor als ik een stage wil gaan zoeken dat ik een __Portfolio__ he
 - Verhaaltje over mij
 - Projecten die ik heb gedaan
 - Leuke effecten
+- Backend
+- Je kan inloggen
 
 ## Gebruik
 
