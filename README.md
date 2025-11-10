@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Showcase Portfolio
 
-## Getting Started
+## Wat te verwachten
+In dit project kun je mijn showcase-portfolio bekijken, waarin ik mijn projecten en vaardigheden laat zien.
 
-First, run the development server:
+## Waarom
+Dit is gemaakt voor als ik een stage wil gaan zoeken dat ik een __Portfolio__ heb die ik kan doorsturen naar de bedrijven. Dit is gemakkelijk voor hun dat ze gelijk kunnen zien wat ik kan en welke projecten ik al heb gemaakt en wat ik allemaal kan.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
+- Verhaaltje over mij
+- Projecten die ik heb gedaan
+- Leuke effecten
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Gebruik
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Voer `npm start` uit en open http://localhost:3000 in je browser. Als je dit hebt gedaan ben je klaar om de koppeling te gebruiken.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Installatie 
+1. Clone de repository:
+   git clone https://github.com/christkastelijn-cyber/PortfolioS3.git
+2. Ga naar de map:
+   cd PortfolioS3
+3. Installeer dependencies: 
+   npm install 
+4. Start de app: 
+   npm start
