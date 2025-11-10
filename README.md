@@ -13,10 +13,6 @@ Dit is gemaakt voor als ik een stage wil gaan zoeken dat ik een __Portfolio__ he
 - Backend
 - Je kan inloggen
 
-## Gebruik
-
-Voer `npm start` uit en open http://localhost:3000 in je browser. Als je dit hebt gedaan ben je klaar om de koppeling te gebruiken.
-
 ## Installatie 
 1. Clone de repository:
    git clone https://github.com/christkastelijn-cyber/PortfolioS3.git
@@ -26,3 +22,7 @@ Voer `npm start` uit en open http://localhost:3000 in je browser. Als je dit heb
    npm install 
 4. Start de app: 
    npm start
+
+## Gebruik
+
+Voer `npm start` uit en open http://localhost:3000 in je browser. Als je dit hebt gedaan ben je klaar om de koppeling te gebruiken.
